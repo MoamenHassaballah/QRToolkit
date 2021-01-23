@@ -1,17 +1,17 @@
-package com.moaapps.qrtoolkit
+package com.moaapps.qrtoolkit.activities
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
+import com.moaapps.qrtoolkit.R
 import com.moaapps.qrtoolkit.databinding.ActivityMainBinding
+import com.moaapps.qrtoolkit.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object{
@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var fragmentTransaction: FragmentTransaction
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,10 +39,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         binding.navView.setCheckedItem(R.id.home)
         binding.navView.setNavigationItemSelectedListener(this)
+
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, HomeFragment(), "fragment").commit()
     }
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.home -> fragmentTransaction.replace(R.id.container, HomeFragment(), "fragment").commit()
+        }
         binding.navView.setCheckedItem(item)
         binding.drawer.closeDrawer(GravityCompat.START)
         return true

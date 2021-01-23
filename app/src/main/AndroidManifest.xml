@@ -10,14 +10,14 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.QRToolkit"
         >
-        <activity android:name=".SplashActivity" >
+        <activity android:name=".activities.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".activities.MainActivity"/>
     </application>
 
 </manifest>
