@@ -8,8 +8,8 @@
     <string name="history">History</string>
     <string name="share">Share</string>
     <string name="rate">Rate</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="scan_code">Scan Code</string>
     <string name="generate_code">Generate Code</string>
+    <string name="results">Results</string>
 </resources>
