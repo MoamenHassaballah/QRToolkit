@@ -12,4 +12,8 @@
     <string name="scan_code">Scan Code</string>
     <string name="generate_code">Generate Code</string>
     <string name="results">Results</string>
+    <string name="enter_your_text">Enter Your Text</string>
+    <string name="save">Save</string>
+    <string name="error_generating_the_code">Error Generating The Code</string>
+    <string name="enter_code_text">Enter Code Text</string>
 </resources>

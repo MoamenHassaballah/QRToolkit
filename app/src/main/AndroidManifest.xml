@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.QRToolkit">
-        <activity android:name=".activities.ResultActivity"></activity>
+        <activity android:name=".activities.GeneratedCodeActivity"></activity>
+        <activity android:name=".activities.GenerateQrActivity" />
+        <activity android:name=".activities.ResultActivity" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

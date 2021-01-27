@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.zxing.integration.android.IntentIntegrator
+import com.moaapps.qrtoolkit.activities.GenerateQrActivity
 import com.moaapps.qrtoolkit.activities.ResultActivity
 import com.moaapps.qrtoolkit.databinding.FragmentHomeBinding
 
@@ -29,6 +30,8 @@ class HomeFragment : Fragment() {
             integrator.setBarcodeImageEnabled(true)
             integrator.initiateScan()
         }
+
+        binding.generateCode.setOnClickListener { GenerateQrActivity.start(context!!) }
         return binding.root;
     }
 
