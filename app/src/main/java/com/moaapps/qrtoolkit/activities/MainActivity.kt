@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import com.moaapps.qrtoolkit.R
 import com.moaapps.qrtoolkit.databinding.ActivityMainBinding
+import com.moaapps.qrtoolkit.fragments.HistoryFragment
 import com.moaapps.qrtoolkit.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -24,7 +25,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var fragmentTransaction: FragmentTransaction
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -33,7 +33,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         toggle = ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.drawer_open, R.string.drawer_close)
         binding.drawer.addDrawerListener(toggle)
-//        toggle.setHomeAsUpIndicator(R.drawable.ic_menu)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -41,14 +40,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.navView.setCheckedItem(R.id.home)
         binding.navView.setNavigationItemSelectedListener(this)
 
-        fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, HomeFragment(), "fragment").commit()
+        supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment()).addToBackStack(null).commit()
     }
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.home -> fragmentTransaction.replace(R.id.container, HomeFragment(), "fragment").commit()
+            R.id.home -> {
+                binding.title.text = getString(R.string.home)
+                supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment()).commit()
+            }
+            R.id.history -> {
+                binding.title.text = getString(R.string.history)
+                supportFragmentManager.beginTransaction().replace(R.id.container, HistoryFragment::class.java.newInstance()).commit()
+            }
         }
         binding.navView.setCheckedItem(item)
         binding.drawer.closeDrawer(GravityCompat.START)

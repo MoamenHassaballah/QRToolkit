@@ -16,4 +16,8 @@
     <string name="save">Save</string>
     <string name="error_generating_the_code">Error Generating The Code</string>
     <string name="enter_code_text">Enter Code Text</string>
+    <string name="share_code">Share QR Code</string>
+    <string name="qr_saved">QR Code Saved Successfully</string>
+    <string name="error_qr_saved">Error Saving QR Code</string>
+    <string name="perms_rational">We need this permission to save the qr code to device\'s storage</string>
 </resources>

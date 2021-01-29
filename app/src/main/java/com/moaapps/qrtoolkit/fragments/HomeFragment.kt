@@ -25,7 +25,7 @@ class HomeFragment : Fragment() {
         binding.scanCode.setOnClickListener {
             val integrator = IntentIntegrator.forSupportFragment(this)
             integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-            integrator.setPrompt("Scan a barcode")
+            integrator.setPrompt("Scan Barcode")
             integrator.setBeepEnabled(false)
             integrator.setBarcodeImageEnabled(true)
             integrator.initiateScan()
