@@ -39,6 +39,7 @@ class GeneratedCodeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGeneratedCodeBinding
     private lateinit var bitmap: Bitmap
     private lateinit var file:File
+    private lateinit var fileName:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGeneratedCodeBinding.inflate(layoutInflater)
@@ -49,8 +50,9 @@ class GeneratedCodeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
+        val content = intent.getStringExtra("qr")
+        fileName = "${Calendar.getInstance().timeInMillis}.jpeg"
         try {
-            val content = intent.getStringExtra("qr")
             val barcodeEncoder = BarcodeEncoder()
             bitmap = barcodeEncoder.encodeBitmap(content, BarcodeFormat.QR_CODE, 500, 500)
             binding.qrImage.setImageBitmap(bitmap)
@@ -60,19 +62,8 @@ class GeneratedCodeActivity : AppCompatActivity() {
         }
 
         binding.save.setOnClickListener {
-            if (!permsGranted()){
-                return@setOnClickListener
-            }
             try {
-                val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "QRToolkit")
-                if (!directory.exists()) {
-                    val generated = directory.mkdir()
-                    Log.d("TAG", "onCreate: $generated")
-                }
-                val file = File(directory, "${Calendar.getInstance().timeInMillis}.png")
-                FileOutputStream(file).use { out ->
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
-                }
+                saveScannedCodeToStorage()
                 Toast.makeText(this, R.string.qr_saved, Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -81,15 +72,13 @@ class GeneratedCodeActivity : AppCompatActivity() {
         }
 
         binding.share.setOnClickListener {
-            if (!permsGranted()){
-                return@setOnClickListener
-            }
             try {
                 val builder = StrictMode.VmPolicy.Builder().build()
                 StrictMode.setVmPolicy(builder)
                 val i = Intent(Intent.ACTION_SEND)
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 i.type = "image/*"
-                i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
+                i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(saveScannedCodeToStorage()))
                 startActivity(Intent.createChooser(i, getString(R.string.share_code)))
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -102,8 +91,8 @@ class GeneratedCodeActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             val time = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
-            val appDatabase = AppDatabase.getInstance(applicationContext).historyDao
-            appDatabase.addQRCode(QRCode(0, file.absolutePath, intent.getStringExtra("result")!!, time, "generated"))
+            val appDatabase = AppDatabase.getInstance(applicationContext).historyDao()
+            appDatabase.addQRCode(QRCode(0, file.absolutePath, content!!, time, "generated"))
         }
 
     }
@@ -114,20 +103,30 @@ class GeneratedCodeActivity : AppCompatActivity() {
             if (!directory.exists()) {
                 directory.mkdirs()
             }
-            file = File(directory, "${Calendar.getInstance().timeInMillis}.png")
+            file = File(directory, "${Calendar.getInstance().timeInMillis}.jpeg")
             FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out) // bmp is your Bitmap instance
             }
+
         }catch (e:IOException){
             e.printStackTrace()
         }
     }
 
-    private fun permsGranted():Boolean{
-        val granted = EasyPermissions.hasPermissions(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-        if (!granted){
-            EasyPermissions.requestPermissions(this, getString(R.string.perms_rational), 123, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    private fun saveScannedCodeToStorage():File {
+        val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "QRToolkit")
+        if (!directory.exists()) {
+            val generated = directory.mkdir()
+            Log.d("TAG", "onCreate: $generated")
         }
-        return granted
+        val file = File(directory, fileName)
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
+        }
+
+        return file
     }
+
+
 }

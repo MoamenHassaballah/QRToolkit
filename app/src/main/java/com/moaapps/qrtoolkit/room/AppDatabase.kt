@@ -9,7 +9,7 @@ import com.moaapps.qrtoolkit.modules.QRCode
 @Database(entities = [QRCode::class], exportSchema = false, version = 1)
 abstract class AppDatabase:RoomDatabase() {
 
-    lateinit var historyDao: HistoryDao
+    abstract fun historyDao(): HistoryDao
 
     companion object{
         fun getInstance(context: Context):AppDatabase{

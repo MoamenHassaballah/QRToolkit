@@ -20,4 +20,5 @@
     <string name="qr_saved">QR Code Saved Successfully</string>
     <string name="error_qr_saved">Error Saving QR Code</string>
     <string name="perms_rational">We need this permission to save the qr code to device\'s storage</string>
+    <string name="accept_perms">You need to accept the permissions</string>
 </resources>

@@ -39,7 +39,7 @@ class ResultActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             val time = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
-            val appDatabase = AppDatabase.getInstance(this@ResultActivity.applicationContext).historyDao
+            val appDatabase = AppDatabase.getInstance(this@ResultActivity.applicationContext).historyDao()
             appDatabase.addQRCode(QRCode(0, null, intent.getStringExtra("result")!!, time, "scanned"))
         }
     }
