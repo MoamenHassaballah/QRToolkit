@@ -1,10 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".fragments.HistoryFragment">
 
+    <RelativeLayout
+        android:id="@+id/switch_layout"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/history_switch_bg"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center_horizontal">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/switcher"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="@color/colorAccent"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardElevation="0dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:elevation="1dp">
+            <TextView
+                android:id="@+id/sw_scanned"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/scanned"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_bold"/>
+
+            <TextView
+                android:id="@+id/sw_generated"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/generated"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:fontFamily="@font/montserrat_bold"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_10sdp"/>
 
 
-</FrameLayout>
+</LinearLayout>

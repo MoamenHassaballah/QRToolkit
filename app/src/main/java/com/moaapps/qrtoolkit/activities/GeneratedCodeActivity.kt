@@ -1,6 +1,7 @@
 package com.moaapps.qrtoolkit.activities
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -8,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -40,6 +42,7 @@ class GeneratedCodeActivity : AppCompatActivity() {
     private lateinit var bitmap: Bitmap
     private lateinit var file:File
     private lateinit var fileName:String
+    private lateinit var imageUri:Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGeneratedCodeBinding.inflate(layoutInflater)
@@ -78,7 +81,7 @@ class GeneratedCodeActivity : AppCompatActivity() {
                 val i = Intent(Intent.ACTION_SEND)
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 i.type = "image/*"
-                i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(saveScannedCodeToStorage()))
+                i.putExtra(Intent.EXTRA_STREAM, saveScannedCodeToStorage())
                 startActivity(Intent.createChooser(i, getString(R.string.share_code)))
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -114,18 +117,20 @@ class GeneratedCodeActivity : AppCompatActivity() {
     }
 
 
-    private fun saveScannedCodeToStorage():File {
-        val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "QRToolkit")
-        if (!directory.exists()) {
-            val generated = directory.mkdir()
-            Log.d("TAG", "onCreate: $generated")
-        }
-        val file = File(directory, fileName)
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out) // bmp is your Bitmap instance
+    private fun saveScannedCodeToStorage():Uri {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/QRToolkit")
         }
 
-        return file
+        if (!this::imageUri.isInitialized){
+            imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+            contentResolver.openOutputStream(imageUri).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
+        }
+        return imageUri
     }
 
 
