@@ -2,6 +2,7 @@ package com.moaapps.qrtoolkit.activities
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +10,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
+import com.moaapps.qrtoolkit.BuildConfig
 import com.moaapps.qrtoolkit.R
 import com.moaapps.qrtoolkit.databinding.ActivityMainBinding
 import com.moaapps.qrtoolkit.fragments.HistoryFragment
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
+    private val appUrl = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,13 +52,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.home -> {
                 binding.title.text = getString(R.string.home)
                 supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment()).commit()
+                binding.navView.setCheckedItem(item)
             }
             R.id.history -> {
                 binding.title.text = getString(R.string.history)
                 supportFragmentManager.beginTransaction().replace(R.id.container, HistoryFragment::class.java.newInstance()).commit()
+                binding.navView.setCheckedItem(item)
+            }
+            R.id.share ->{
+
+                val shareText = "${getString(R.string.share_msg)}\n$appUrl"
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.putExtra(Intent.EXTRA_TEXT, shareText)
+                intent.type = "text/plain"
+                startActivity(Intent.createChooser(intent,getString(R.string.share_app)))
+            }
+            R.id.rate ->{
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)))
             }
         }
-        binding.navView.setCheckedItem(item)
+
         binding.drawer.closeDrawer(GravityCompat.START)
         return true
     }

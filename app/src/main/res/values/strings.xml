@@ -31,4 +31,6 @@
     <string name="no_items">No Items Found</string>
     <string name="copy">Copy</string>
     <string name="share_qr_result">Share Code Result</string>
+    <string name="share_msg">Check out this QR code app</string>
+    <string name="share_app">Share App</string>
 </resources>
