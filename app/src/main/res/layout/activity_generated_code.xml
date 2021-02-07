@@ -73,6 +73,7 @@
             android:text="@string/save"
             android:textSize="@dimen/_20ssp"
             android:layout_weight="1"
+            android:textColor="@color/white"
             android:layout_marginHorizontal="@dimen/_5sdp"/>
 
         <Button
@@ -83,6 +84,7 @@
             android:text="@string/share"
             android:textSize="@dimen/_20ssp"
             android:layout_weight="1"
+            android:textColor="@color/white"
             android:layout_marginHorizontal="@dimen/_5sdp"/>
 
     </LinearLayout>

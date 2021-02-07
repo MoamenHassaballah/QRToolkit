@@ -95,14 +95,14 @@ class GeneratedCodeActivity : AppCompatActivity() {
         GlobalScope.launch {
             val time = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
             val appDatabase = AppDatabase.getInstance(applicationContext).historyDao()
-            appDatabase.addQRCode(QRCode(0, file.absolutePath, content!!, time, "generated"))
+            appDatabase.addQRCode(QRCode(0, content!!, time, "generated", fileName))
         }
 
     }
 
     private fun saveScannedCode() {
         try {
-            val directory = File(filesDir, "QRToolkit")
+            val directory = File(filesDir, getString(R.string.app_name))
             if (!directory.exists()) {
                 directory.mkdirs()
             }
@@ -121,10 +121,10 @@ class GeneratedCodeActivity : AppCompatActivity() {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/QRToolkit")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/${getString(R.string.app_name)}")
         }
 
-        if (!this::imageUri.isInitialized){
+        if (!isFileSaved()){
             imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
             contentResolver.openOutputStream(imageUri).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
@@ -133,5 +133,10 @@ class GeneratedCodeActivity : AppCompatActivity() {
         return imageUri
     }
 
+
+    private fun isFileSaved():Boolean{
+        val file = File(Environment.DIRECTORY_PICTURES, "${getString(R.string.app_name)}/${fileName}.jpeg")
+        return file.exists()
+    }
 
 }

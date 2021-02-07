@@ -9,9 +9,6 @@ data class QRCode(
     @PrimaryKey(autoGenerate = true)
     var id:Int,
 
-    @ColumnInfo(name = "path")
-    var path:String?,
-
     @ColumnInfo(name = "value")
     var value:String,
 
@@ -19,6 +16,9 @@ data class QRCode(
     var time:String,
 
     @ColumnInfo(name = "type")
-    var type:String
+    var type:String,
+
+    @ColumnInfo(name = "name")
+    var name:String?
 ) {
 }

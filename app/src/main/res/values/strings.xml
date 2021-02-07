@@ -23,4 +23,12 @@
     <string name="accept_perms">You need to accept the permissions</string>
     <string name="scanned">Scanned</string>
     <string name="generated">Generated</string>
+    <string name="qr_title_copied">QR title copied successfully</string>
+    <string name="delete">Delete</string>
+    <string name="delete_qr_msg">Are you sure you want to delete this QR code ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="no_items">No Items Found</string>
+    <string name="copy">Copy</string>
+    <string name="share_qr_result">Share Code Result</string>
 </resources>
