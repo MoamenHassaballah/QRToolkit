@@ -29,6 +29,7 @@ import java.nio.file.Files.delete
 
 class HistoryAdapter(private val activity:Activity, private val list: ArrayList<QRCode>) : RecyclerView.Adapter<HistoryAdapter.Holder>() {
 
+    private var imageUri: Uri? = null
 
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title:TextView = itemView.findViewById(R.id.history_title)
@@ -118,9 +119,26 @@ class HistoryAdapter(private val activity:Activity, private val list: ArrayList<
     }
 
     private fun isFileSaved(fileName:String):Boolean{
-        val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "${activity.getString(R.string.app_name)}/${fileName}")
-        Log.d("TAG", "isFileSaved: ${file.absolutePath}, ${file.exists()}")
-        return file.exists()
+//        val file = File(activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${activity.getString(R.string.app_name)}/${fileName}")
+        val projection = arrayOf(
+                MediaStore.MediaColumns._ID
+        )
+
+        val selection = "${MediaStore.MediaColumns.RELATIVE_PATH}='${Environment.DIRECTORY_PICTURES}/${activity.getString(R.string.app_name)}/' AND " +
+                "${MediaStore.MediaColumns.DISPLAY_NAME}='$fileName' "
+
+        activity.contentResolver.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection, selection, null, null ).use { c ->
+            if (c != null && c.count >= 1){
+                c.moveToFirst().let {
+                    val id = c.getLong(c.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                    imageUri = ContentUris.withAppendedId(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,  id)
+                }
+            }
+            Log.d("TAG", "isFileSaved: ${c != null && c.count >= 1}")
+            return c != null && c.count >= 1
+        }
     }
 
     private fun saveScannedCodeToStorage(qrCode: QRCode): Uri {
@@ -130,15 +148,12 @@ class HistoryAdapter(private val activity:Activity, private val list: ArrayList<
             put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_PICTURES}/${activity.getString(R.string.app_name)}")
         }
 
-        var imageUri:Uri? = null
+
         if (!isFileSaved(qrCode.name!!)){
             imageUri = activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
-            activity.contentResolver.openOutputStream(imageUri).use { out ->
+            activity.contentResolver.openOutputStream(imageUri!!).use { out ->
                 getQrImage(qrCode.value).compress(Bitmap.CompressFormat.PNG, 100, out)
             }
-        }else{
-            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "${activity.getString(R.string.app_name)}/${qrCode.name}")
-            imageUri = Uri.fromFile(file)
         }
         return imageUri!!
     }
