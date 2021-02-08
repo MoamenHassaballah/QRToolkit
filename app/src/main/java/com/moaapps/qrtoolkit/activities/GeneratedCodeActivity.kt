@@ -1,6 +1,7 @@
 package com.moaapps.qrtoolkit.activities
 
 import android.Manifest
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -81,7 +82,7 @@ class GeneratedCodeActivity : AppCompatActivity() {
                 val i = Intent(Intent.ACTION_SEND)
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 i.type = "image/*"
-                i.putExtra(Intent.EXTRA_STREAM, saveScannedCodeToStorage())
+                i.putExtra(Intent.EXTRA_STREAM, getFileForShare())
                 startActivity(Intent.createChooser(i, getString(R.string.share_code)))
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -90,7 +91,7 @@ class GeneratedCodeActivity : AppCompatActivity() {
 
         binding.goHome.setOnClickListener { MainActivity.start(this) }
 
-        saveScannedCode()
+//        saveScannedCode()
 
         GlobalScope.launch {
             val time = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault()).format(Calendar.getInstance().time)
@@ -100,21 +101,21 @@ class GeneratedCodeActivity : AppCompatActivity() {
 
     }
 
-    private fun saveScannedCode() {
-        try {
-            val directory = File(filesDir, getString(R.string.app_name))
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-            file = File(directory, "${Calendar.getInstance().timeInMillis}.jpeg")
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out) // bmp is your Bitmap instance
-            }
-
-        }catch (e:IOException){
-            e.printStackTrace()
-        }
-    }
+//    private fun saveScannedCode() {
+//        try {
+//            val directory = File(filesDir, getString(R.string.app_name))
+//            if (!directory.exists()) {
+//                directory.mkdirs()
+//            }
+//            file = File(directory, "${Calendar.getInstance().timeInMillis}.jpeg")
+//            FileOutputStream(file).use { out ->
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out) // bmp is your Bitmap instance
+//            }
+//
+//        }catch (e:IOException){
+//            e.printStackTrace()
+//        }
+//    }
 
 
     private fun saveScannedCodeToStorage():Uri {
@@ -133,10 +134,39 @@ class GeneratedCodeActivity : AppCompatActivity() {
         return imageUri
     }
 
+    private fun getFileForShare():Uri {
+        val dir = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), getString(R.string.app_name))
+        if (!dir.exists()){
+            dir.mkdirs()
+        }
+        val file = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "${getString(R.string.app_name)}/${fileName}")
+        if (!file.exists()){
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        }
+        return Uri.fromFile(file)
+    }
 
     private fun isFileSaved():Boolean{
-        val file = File(Environment.DIRECTORY_PICTURES, "${getString(R.string.app_name)}/${fileName}.jpeg")
-        return file.exists()
+        val projection = arrayOf(
+                MediaStore.MediaColumns._ID
+        )
+
+        val selection = "${MediaStore.MediaColumns.RELATIVE_PATH}='${Environment.DIRECTORY_PICTURES}/${getString(R.string.app_name)}/' AND " +
+                "${MediaStore.MediaColumns.DISPLAY_NAME}='$fileName' "
+
+        contentResolver.query( MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection, selection, null, null ).use { c ->
+            if (c != null && c.count >= 1){
+                c.moveToFirst().let {
+                    val id = c.getLong(c.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+                    imageUri = ContentUris.withAppendedId(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,  id)
+                }
+            }
+            Log.d("TAG", "isFileSaved: ${c != null && c.count >= 1}")
+            return c != null && c.count >= 1
+        }
     }
 
 }
