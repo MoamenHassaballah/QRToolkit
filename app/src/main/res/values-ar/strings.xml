@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QR Toolkit</string>
+    <string name="toolkit">ادوات</string>
+    <string name="home">الرئيسية</string>
+    <string name="history">التاريخ</string>
+    <string name="share">مشاركة</string>
+    <string name="rate">تقييم</string>
+    <string name="scan_code">مسح الرمز</string>
+    <string name="generate_code">إنشاء رمز</string>
+    <string name="results">النتائج</string>
+    <string name="enter_your_text">أدخل النص الخاص بك</string>
+    <string name="save">حفظ</string>
+    <string name="error_generating_the_code">خطأ في توليد الكود</string>
+    <string name="enter_code_text">أدخل نص الكود</string>
+    <string name="share_code">مشاركة رمز QR</string>
+    <string name="qr_saved">تم حفظ رمز QR بنجاح</string>
+    <string name="error_qr_saved">خطأ في حفظ رمز QR</string>
+    <string name="perms_rational">نحتاج إلى هذا الإذن لحفظ رمز QR في مساحة تخزين الجهاز</string>
+    <string name="accept_perms">تحتاج إلى قبول الأذونات</string>
+    <string name="scanned">"الممسوحة "</string>
+    <string name="generated">المتولده</string>
+    <string name="qr_title_copied">تم نسخ عنوان QR بنجاح</string>
+    <string name="delete">حذف</string>
+    <string name="delete_qr_msg">هل أنت متأكد أنك تريد حذف رمز QR هذا؟</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+    <string name="no_items">لم يتم العثور على العناصر</string>
+    <string name="copy">نسخ</string>
+    <string name="share_qr_result">مشاركة نتيجة الكود</string>
+    <string name="share_app">شارك التطبيق</string>
+    <string name="language">اللغة</string>
+    <string name="select_language">إختيار اللغة</string>
+</resources>

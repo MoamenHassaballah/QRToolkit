@@ -1,22 +1,23 @@
 package com.moaapps.qrtoolkit.activities
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import com.moaapps.qrtoolkit.BuildConfig
 import com.moaapps.qrtoolkit.R
 import com.moaapps.qrtoolkit.databinding.ActivityMainBinding
 import com.moaapps.qrtoolkit.fragments.HistoryFragment
 import com.moaapps.qrtoolkit.fragments.HomeFragment
+import java.util.*
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object{
@@ -63,21 +64,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 supportFragmentManager.beginTransaction().replace(R.id.container, HistoryFragment::class.java.newInstance()).commit()
                 binding.navView.setCheckedItem(item)
             }
-            R.id.share ->{
+            R.id.share -> {
 
                 val shareText = "${getString(R.string.share_msg)}\n$appUrl"
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.putExtra(Intent.EXTRA_TEXT, shareText)
                 intent.type = "text/plain"
-                startActivity(Intent.createChooser(intent,getString(R.string.share_app)))
+                startActivity(Intent.createChooser(intent, getString(R.string.share_app)))
             }
-            R.id.rate ->{
+            R.id.rate -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)))
+            }
+            R.id.language -> {
+                AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.select_language))
+                        .setSingleChoiceItems(R.array.languagesList, -1) { dialog, which ->
+                            val codes = resources.getStringArray(R.array.languageCode)
+                            val langCode = codes[which]
+                            dialog.dismiss()
+                            setLocale(langCode)
+
+
+                        }
+                        .show()
             }
         }
 
         binding.drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
+    private fun setLocale(languageCode: String?) {
+        val locale = Locale(languageCode!!)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        getSharedPreferences("PRE", MODE_PRIVATE).edit().putString("lng", languageCode).apply()
+        recreate()
+    }
+
+
+
 
 }

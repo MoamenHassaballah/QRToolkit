@@ -21,6 +21,11 @@
             android:title="@string/rate"
             android:icon="@drawable/ic_rate"
             android:checkable="true"/>
+
+        <item android:id="@+id/language"
+            android:title="@string/language"
+            android:icon="@drawable/ic_languages"
+            android:checkable="true"/>
     </group>
 
 </menu>

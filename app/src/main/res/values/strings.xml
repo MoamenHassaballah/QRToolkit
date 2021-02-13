@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">QR Toolkit</string>
-    <string name="qr">QR</string>
+    <string name="qr" translatable="false">QR</string>
     <string name="toolkit">Toolkit</string>
-    <string name="drawer_close">Drawer Close</string>
-    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close" translatable="false">Drawer Close</string>
+    <string name="drawer_open" translatable="false">Drawer Open</string>
     <string name="home">Home</string>
     <string name="history">History</string>
     <string name="share">Share</string>
     <string name="rate">Rate</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="scan_code">Scan Code</string>
     <string name="generate_code">Generate Code</string>
     <string name="results">Results</string>
@@ -31,6 +31,19 @@
     <string name="no_items">No Items Found</string>
     <string name="copy">Copy</string>
     <string name="share_qr_result">Share Code Result</string>
-    <string name="share_msg">Check out this QR code app</string>
+    <string name="share_msg" translatable="false">Check out this QR code app</string>
     <string name="share_app">Share App</string>
+    <string name="language">Language</string>
+    <string name="select_language">Select Language</string>
+
+
+    <array name="languagesList">
+        <item>English</item>
+        <item>العربية</item>
+    </array>
+
+    <array name="languageCode">
+        <item>en</item>
+        <item>ar</item>
+    </array>
 </resources>
