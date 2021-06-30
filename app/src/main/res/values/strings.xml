@@ -35,6 +35,7 @@
     <string name="share_app">Share App</string>
     <string name="language">Language</string>
     <string name="select_language">Select Language</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
 
     <array name="languagesList">

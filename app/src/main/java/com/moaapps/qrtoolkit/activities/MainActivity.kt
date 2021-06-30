@@ -88,6 +88,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                         .show()
             }
+            R.id.privacy_policy -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.privacypolicies.com/live/67ba21db-ca86-41f1-ad05-bf2a124ee1c6")))
+            }
         }
 
         binding.drawer.closeDrawer(GravityCompat.START)

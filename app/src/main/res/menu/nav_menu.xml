@@ -26,6 +26,11 @@
             android:title="@string/language"
             android:icon="@drawable/ic_languages"
             android:checkable="true"/>
+
+        <item android:id="@+id/privacy_policy"
+            android:title="@string/privacy_policy"
+            android:icon="@drawable/ic_privacy_policy"
+            android:checkable="true"/>
     </group>
 
 </menu>
