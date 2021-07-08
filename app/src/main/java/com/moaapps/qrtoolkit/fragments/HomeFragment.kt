@@ -37,17 +37,14 @@ class HomeFragment : Fragment() {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if(result != null) {
             if(result.contents == null) {
                 Toast.makeText(activity, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d(TAG, "onActivityResult: ${result.contents}, ${result.formatName}")
-                ResultActivity.start(context!!, result.contents)
+                ResultActivity.start(requireContext(), result.contents)
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }
