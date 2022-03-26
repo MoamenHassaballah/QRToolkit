@@ -16,21 +16,27 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.QRToolkit">
-        <activity android:name=".activities.GeneratedCodeActivity" />
-        <activity android:name=".activities.GenerateQrActivity" />
-        <activity android:name=".activities.ResultActivity" />
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name=".activities.GeneratedCodeActivity"
+            android:exported="false"/>
+        <activity android:name=".activities.GenerateQrActivity"
+            android:exported="false"/>
+        <activity android:name=".activities.ResultActivity"
+            android:exported="false"/>
+        <activity android:name=".activities.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.MainActivity"
+            android:exported="false"/>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
-            tools:replace="screenOrientation" />
+            tools:replace="screenOrientation"
+            android:exported="false"/>
     </application>
 
 </manifest>
